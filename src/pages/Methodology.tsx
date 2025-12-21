@@ -91,7 +91,7 @@ export default function Methodology() {
           </p>
 
           <div className="space-y-6">
-            {FACTORS.map((factor, idx) => (
+            {FACTORS.map((factor, _) => (
               <div key={factor.id} className="border border-gray-200 rounded-lg p-6">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-lg font-semibold text-gray-900">{factor.label}</h3>
