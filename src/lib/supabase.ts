@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 import { Company } from '../types';
 
 // These will be set via environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -62,7 +62,8 @@ export async function deleteCompany(id: string): Promise<{ error: any }> {
 
 // Simple authentication using localStorage
 export function login(password: string): boolean {
-  const correctPassword = import.meta.env.VITE_SITE_PASSWORD || 'BryanVC2025';
+  const correctPassword = (import.meta.env.VITE_SITE_PASSWORD as string) || 'BryanVC2025';
+;
   
   if (password === correctPassword) {
     localStorage.setItem('authenticated', 'true');
