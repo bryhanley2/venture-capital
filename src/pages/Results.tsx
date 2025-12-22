@@ -164,12 +164,12 @@ export default function Results() {
                     </span>
                     <span className="font-semibold">{category.score.toFixed(1)}/10</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div
-                      className={`h-3 rounded-full transition-all ${getBarColor(category.score * 10)}`}
-                      style={{ width: `${category.score * 10}%` }}
-                    ></div>
-                  </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+  <div
+    className={`h-3 rounded-full transition-all ${getBarColor(category.score * 10)}`}
+    style={{ width: `${Math.min(100, category.score * 10)}%` }}
+  ></div>
+</div>
                 </div>
               ))}
             </div>
