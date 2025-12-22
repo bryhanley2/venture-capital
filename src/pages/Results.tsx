@@ -162,12 +162,11 @@ export default function Results() {
                     <span className="font-medium">
                       {category.label} ({category.weight})
                     </span>
-<span className="font-semibold">{(category.score * 10).toFixed(1)}%</span>                  </div>
+<span className="font-semibold">{category.score.toFixed(1)}%</span>                </div>
                 <div className="w-full bg-gray-200 rounded-full h-3">
   <div
     className={`h-3 rounded-full transition-all ${getBarColor(category.score * 10)}`}
-    style={{ width: `${Math.min(100, category.score * 10)}%` }}
-  ></div>
+style={{ width: `${Math.min(100, category.score)}%` }}  ></div>
 </div>
                 </div>
               ))}
