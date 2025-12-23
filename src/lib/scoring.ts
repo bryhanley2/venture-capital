@@ -82,40 +82,39 @@ export function getFactorBreakdown(scores: CompanyScores): FactorBreakdown {
   return {
     founderQuality: {
       score:
-        ((scores.factor_1a * WEIGHTS.factor_1a +
+        (scores.factor_1a * WEIGHTS.factor_1a +
           scores.factor_1b * WEIGHTS.factor_1b +
-          scores.factor_1c * WEIGHTS.factor_1c) *
-          10) /
+          scores.factor_1c * WEIGHTS.factor_1c) /
         0.25,
       weight: '25%',
       label: 'Founder Quality',
     },
     productMarketFit: {
       score:
-        ((scores.factor_2a * WEIGHTS.factor_2a + scores.factor_2b * WEIGHTS.factor_2b) * 10) /
+        (scores.factor_2a * WEIGHTS.factor_2a + scores.factor_2b * WEIGHTS.factor_2b) /
         0.2,
       weight: '20%',
       label: 'Product-Market Fit',
     },
     marketTiming: {
       score:
-        ((scores.factor_3a * WEIGHTS.factor_3a + scores.factor_3b * WEIGHTS.factor_3b) * 10) /
+        (scores.factor_3a * WEIGHTS.factor_3a + scores.factor_3b * WEIGHTS.factor_3b) /
         0.2,
       weight: '20%',
       label: 'Market Size & Timing',
     },
     traction: {
-      score: ((scores.factor_4 * WEIGHTS.factor_4 + scores.factor_5 * WEIGHTS.factor_5) * 10) / 0.15,
+      score: (scores.factor_4 * WEIGHTS.factor_4 + scores.factor_5 * WEIGHTS.factor_5) / 0.15,
       weight: '15%',
       label: 'Traction',
     },
     efficiency: {
-      score: (scores.factor_6 * WEIGHTS.factor_6 * 10) / 0.1,
+      score: (scores.factor_6 * WEIGHTS.factor_6) / 0.1,
       weight: '10%',
       label: 'Capital Efficiency',
     },
     investor: {
-      score: (scores.factor_7 * WEIGHTS.factor_7 * 10) / 0.1,
+      score: (scores.factor_7 * WEIGHTS.factor_7) / 0.1,
       weight: '10%',
       label: 'Investor Signal',
     },
