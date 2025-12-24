@@ -36,7 +36,7 @@ export default function Footer() {
             <div className="space-y-2 text-gray-400">
               <div>
                 <a
-                  href="https://linkedin.com/in/bryanhanley"
+                  href="https://www.linkedin.com/in/bryan-stanley-hanley/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition"
