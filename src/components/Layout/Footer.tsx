@@ -45,7 +45,7 @@ export default function Footer() {
                 </a>
               </div>
               <div>
-                <a href="mailto:bryan@example.com" className="hover:text-white transition">
+                <a href="mailto:bry.hanley2@gmail.com" className="hover:text-white transition">
                   Email
                 </a>
               </div>
