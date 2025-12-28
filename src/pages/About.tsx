@@ -30,11 +30,10 @@ const About: React.FC = () => {
           </p>
           <p className="text-gray-700 mb-4">
             By analyzing patterns across successful and failed companies, the framework reveals which factors consistently predict unicorn outcomes. Understanding what drove Stripe, Airbnb, and Coinbase from seed to $10B+ enables earlier identification of tomorrow's breakthrough companies—before traditional metrics catch on.
-          </p>
+            </p>
           <p className="text-gray-700">
             Framework validated across 50 historical seed-stage companies.
-            </p>
-          </div>
+          </p>
         </div>
       </div>
     </div>
