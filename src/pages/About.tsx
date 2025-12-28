@@ -9,7 +9,7 @@ const About: React.FC = () => {
         {/* Mission/Introduction */}
         <div className="mb-8">
 	  <h2 className="text-2xl font-bold text-gray-900 mb-3">The Mission</h2>
-          <p className="text-gray-700">
+          <p className="text-gray-700 mb-4">
             Most seed-stage investors rely on gut instinct and founder charisma. This framework takes a different approach: quantifying the 11 factors that separate billion-dollar outcomes from failures, validated against 50 historical seed-stage companies.
           </p>
         </div>
@@ -17,7 +17,7 @@ const About: React.FC = () => {
         {/* The Approach */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-3">The Approach</h2>
-          <p className="text-gray-700">
+          <p className="text-gray-700 mb-4">
             This platform applies data-driven rigor to seed-stage investing, validated by correctly identifying all 15 unicorns and all 8 failures in a 50-company historical analysis. The framework reveals the 11 factors that separate billion-dollar outcomes from inevitable shutdowns.
           </p>
         </div>
