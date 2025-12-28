@@ -35,29 +35,6 @@ const About: React.FC = () => {
             Framework validated across 50 historical seed-stage companies.
           </p>
         </div>
-
-        {/* Connect Section */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Connect</h2>
-          <div className="space-y-2">
-            <p className="text-gray-700">
-              <span className="font-semibold">LinkedIn:</span>{' '}
-              <a 
-                href="https://www.linkedin.com/in/bryan-stanley-hanley/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-700 underline"
-              >
-                bryan-stanley-hanley
-              </a>
-            </p>
-            <p className="text-gray-700">
-              <span className="font-semibold">Email:</span>{' '}
-              <a 
-                href="mailto:bryanstanleyhanley@gmail.com"
-                className="text-blue-600 hover:text-blue-700 underline"
-              >
-                bryanstanleyhanley@gmail.com
               </a>
             </p>
           </div>
