@@ -4,10 +4,11 @@ const About: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">About This Framework</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-8">About This Platform</h1>
         
         {/* Mission/Introduction */}
         <div className="mb-8">
+	  <h2 className="text-2xl font-bold text-gray-900 mb-3">The Mission</h2>
           <p className="text-gray-700 text-lg leading-relaxed">
             Most seed-stage investors rely on gut instinct and founder charisma. This framework takes a different approach: quantifying the 11 factors that separate billion-dollar outcomes from failures, validated against 50 historical seed-stage companies.
           </p>
