@@ -33,9 +33,6 @@ const About: React.FC = () => {
           </p>
           <p className="text-gray-700">
             Framework validated across 50 historical seed-stage companies.
-          </p>
-        </div>
-              </a>
             </p>
           </div>
         </div>
