@@ -9,7 +9,7 @@ const About: React.FC = () => {
         {/* Mission/Introduction */}
         <div className="mb-8">
 	  <h2 className="text-2xl font-bold text-gray-900 mb-3">The Mission</h2>
-          <p className="text-gray-700 text-lg leading-relaxed">
+          <p className="text-gray-700">
             Most seed-stage investors rely on gut instinct and founder charisma. This framework takes a different approach: quantifying the 11 factors that separate billion-dollar outcomes from failures, validated against 50 historical seed-stage companies.
           </p>
         </div>
