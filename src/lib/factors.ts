@@ -7,11 +7,11 @@ export const FACTORS: FactorInfo[] = [
     weight: '10%',
     description: 'Does the founder have relevant domain expertise and experience?',
     scoreGuide: [
-      { score: '9-10', description: 'Prior exit + deep domain expertise (e.g., Jan Koum - WhatsApp)' },
+      { score: '9-10', description: 'Prior exit + deep domain expertise' },
       { score: '7-8', description: 'Strong background, 2-5 years relevant experience' },
       { score: '5-6', description: 'Some relevant experience, adjacent domain' },
       { score: '3-4', description: 'Limited experience, young founder learning' },
-      { score: '0-2', description: 'No relevant experience (e.g., Elizabeth Holmes - Theranos)' },
+      { score: '0-2', description: 'No relevant experience' },
     ],
   },
   {
