@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Evaluate from './pages/Evaluate';
 import Results from './pages/Results';
 import Portfolio from './pages/Portfolio';
+import Dealflow from './pages/Dealflow';
 import Methodology from './pages/Methodology';
 import About from './pages/About';
 
@@ -40,6 +41,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Portfolio />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dealflow"
+              element={
+                <ProtectedRoute>
+                  <Dealflow />
                 </ProtectedRoute>
               }
             />

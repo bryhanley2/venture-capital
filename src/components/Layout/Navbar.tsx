@@ -27,6 +27,9 @@ export default function Navbar() {
                 <Link to="/evaluate" className="text-gray-700 hover:text-brand-900 font-medium transition">
                   Evaluate
                 </Link>
+                <Link to="/dealflow" className="text-gray-700 hover:text-brand-900 font-medium transition">
+                  Dealflow
+                </Link>
                 <Link to="/portfolio" className="text-gray-700 hover:text-brand-900 font-medium transition">
                   Portfolio
                 </Link>
