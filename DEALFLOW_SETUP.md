@@ -1,12 +1,15 @@
 # Dealflow feature — setup
 
-The `/dealflow` page (login-gated) has two parts:
+The `/dealflow` page (login-gated) has three parts:
 
-1. **Dealflow board** — reads the Second Layer pipeline's Google Sheet (read-only) and
-   shows every company it has written, ranked by weighted score, filterable by vertical.
-2. **Check a company** — one live Claude + web-search pass that assesses any company you
+1. **Check a company** — one live Claude + web-search pass that assesses any company you
    type against the thesis (~$0.05 per check). This is the only thing on the site that
    spends API credit, and it is behind the login + a shared-secret header.
+2. **Watchlist** — the pipeline's `Watchlist` sheet tab: thesis-fit companies that
+   weren't ready yet, with the movement signals the pipeline picked up on its last
+   re-check. Read-only, no extra config.
+3. **Dealflow board** — reads the Second Layer pipeline's Google Sheet (read-only) and
+   shows every company it has written, ranked by weighted score, filterable by vertical.
 
 The heavy pipeline stays exactly where it is — manual `workflow_dispatch` in
 `second-layer-verticals`. This site never triggers it.

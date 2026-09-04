@@ -28,11 +28,32 @@ export interface DealRow {
   [k: string]: string;
 }
 
-export async function getDealflow(): Promise<DealRow[]> {
+export interface WatchRow {
+  Company: string;
+  Website: string;
+  Vertical: string;
+  Added: string;
+  Source: string;
+  'Last Score': string;
+  'Last Stage': string;
+  'Last Funding': string;
+  'Last Checked': string;
+  'Last Signal': string;
+  Status: string;
+  Notes: string;
+  [k: string]: string;
+}
+
+export interface DealflowData {
+  companies: DealRow[];
+  watchlist: WatchRow[];
+}
+
+export async function getDealflow(): Promise<DealflowData> {
   const r = await fetch('/api/dealflow', { headers: headers() });
   const j = await r.json();
   if (!r.ok) throw new Error(j.error || `dealflow ${r.status}`);
-  return j.companies as DealRow[];
+  return { companies: (j.companies || []) as DealRow[], watchlist: (j.watchlist || []) as WatchRow[] };
 }
 
 export interface CompanyCheck {
