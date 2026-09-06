@@ -59,13 +59,14 @@ export async function deleteCompany(id: string): Promise<{ error: any }> {
 }
 
 export function login(password: string): boolean {
-  const correctPassword = import.meta.env.VITE_SITE_PASSWORD || 'BryanVC2025';
-  
-  if (password === correctPassword) {
+  // No hardcoded fallback — if VITE_SITE_PASSWORD isn't set, login fails closed.
+  const correctPassword = import.meta.env.VITE_SITE_PASSWORD;
+
+  if (correctPassword && password === correctPassword) {
     localStorage.setItem('authenticated', 'true');
     return true;
   }
-  
+
   return false;
 }
 

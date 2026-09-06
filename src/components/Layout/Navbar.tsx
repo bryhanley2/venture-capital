@@ -25,11 +25,9 @@ export default function Navbar() {
             <Link to="/map" className="text-gray-700 hover:text-brand-900 font-medium transition">
               Second Layer Map
             </Link>
-            {authenticated && (
-              <Link to="/dealflow" className="text-gray-700 hover:text-brand-900 font-medium transition">
-                Dealflow
-              </Link>
-            )}
+            <Link to="/dealflow" className="text-gray-700 hover:text-brand-900 font-medium transition">
+              Dealflow
+            </Link>
             <Link to="/about" className="text-gray-700 hover:text-brand-900 font-medium transition">
               About
             </Link>
