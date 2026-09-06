@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { googleAccessToken } from './_shared';
+import { googleAccessToken } from './_shared.js';
 
 // PUBLIC endpoint — no APP_TOKEN. It reads ONLY the "Second Layer Map" tab,
 // which the pipeline writes with publish-safe fields (no scores, risks, or

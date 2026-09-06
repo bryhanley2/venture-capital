@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { authorised, googleAccessToken } from './_shared';
+import { authorised, googleAccessToken } from './_shared.js';
 
 // Column order written by second-layer-verticals/pipeline_utils.PIPELINE_HEADERS
 const HEADERS = [
