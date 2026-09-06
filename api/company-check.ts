@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { authorised } from './_shared';
+import { authorised } from './_shared.js';
 
 const MODEL = process.env.PIPELINE_MODEL || 'claude-sonnet-5';
 
