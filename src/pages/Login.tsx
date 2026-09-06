@@ -11,7 +11,7 @@ export default function Login() {
     e.preventDefault();
     
     if (login(password)) {
-      navigate('/evaluate');
+      navigate('/dealflow');
     } else {
       setError('Invalid password. Please try again.');
       setPassword('');

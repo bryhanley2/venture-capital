@@ -7,20 +7,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4">BryanHanley.VC</h3>
-            <p className="text-gray-400">Data-driven seed stage investment analysis</p>
+            <p className="text-gray-400">
+              Second Layer sourcing — backing the companies that solve the problems a
+              dominant trend creates.
+            </p>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Links</h4>
+            <h4 className="font-semibold mb-4">Explore</h4>
             <div className="space-y-2 text-gray-400">
               <div>
-                <Link to="/methodology" className="hover:text-white transition">
-                  Methodology
-                </Link>
-              </div>
-              <div>
-                <Link to="/portfolio" className="hover:text-white transition">
-                  Portfolio
+                <Link to="/map" className="hover:text-white transition">
+                  Second Layer Map
                 </Link>
               </div>
               <div>
@@ -54,7 +52,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>© 2025 Bryan Hanley. All rights reserved.</p>
+          <p>© 2026 Bryan Hanley. All rights reserved.</p>
         </div>
       </div>
     </footer>

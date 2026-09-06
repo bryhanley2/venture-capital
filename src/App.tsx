@@ -4,12 +4,8 @@ import Footer from './components/Layout/Footer';
 import ProtectedRoute from './components/Layout/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Evaluate from './pages/Evaluate';
-import Results from './pages/Results';
-import Portfolio from './pages/Portfolio';
 import Dealflow from './pages/Dealflow';
 import SecondLayerMap from './pages/SecondLayerMap';
-import Methodology from './pages/Methodology';
 import About from './pages/About';
 
 function App() {
@@ -21,30 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/evaluate"
-              element={
-                <ProtectedRoute>
-                  <Evaluate />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/results/:id"
-              element={
-                <ProtectedRoute>
-                  <Results />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/portfolio"
-              element={
-                <ProtectedRoute>
-                  <Portfolio />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/map" element={<SecondLayerMap />} />
+            <Route path="/about" element={<About />} />
             <Route
               path="/dealflow"
               element={
@@ -53,9 +27,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/map" element={<SecondLayerMap />} />
-            <Route path="/methodology" element={<Methodology />} />
-            <Route path="/about" element={<About />} />
           </Routes>
         </main>
         <Footer />
