@@ -3,16 +3,17 @@ import { getSecondLayerMap, SecondLayerMap as MapData, MapLayer } from '../lib/m
 
 export default function SecondLayerMap() {
   const [data, setData] = useState<MapData | null>(null);
-  const [err, setErr] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getSecondLayerMap()
       .then(setData)
-      .catch((e) => setErr(e?.message || 'Could not load the map'))
+      .catch((e) => console.warn('second layer map:', e))
       .finally(() => setLoading(false));
   }, []);
 
+  // A public page: a fetch failure and "not built yet" both land on the same
+  // neutral empty state — never a raw error string.
   const empty = !loading && (!data || !data.layers.length);
 
   return (
@@ -47,11 +48,9 @@ export default function SecondLayerMap() {
         </p>
 
         {loading && <p className="text-gray-500">Loading the map…</p>}
-        {err && <p className="text-red-600 text-sm">{err}</p>}
         {empty && (
           <div className="bg-white rounded-xl border border-gray-200 p-8 text-gray-500">
-            The map hasn't been built yet — run the pipeline for the vertical that has a
-            Second Layer map taxonomy.
+            The map is being compiled from the latest pipeline run — check back shortly.
           </div>
         )}
 
