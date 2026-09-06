@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
-import ProtectedRoute from './components/Layout/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dealflow from './pages/Dealflow';
+import RequestAccess from './pages/RequestAccess';
 import SecondLayerMap from './pages/SecondLayerMap';
 import About from './pages/About';
+import { isAuthenticated } from './lib/supabase';
 
 function App() {
   return (
@@ -19,14 +20,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/map" element={<SecondLayerMap />} />
             <Route path="/about" element={<About />} />
-            <Route
-              path="/dealflow"
-              element={
-                <ProtectedRoute>
-                  <Dealflow />
-                </ProtectedRoute>
-              }
-            />
+            {/* Not a redirect: unauthenticated visitors get the request-access page. */}
+            <Route path="/dealflow" element={isAuthenticated() ? <Dealflow /> : <RequestAccess />} />
           </Routes>
         </main>
         <Footer />

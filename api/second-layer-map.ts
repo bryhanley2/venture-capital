@@ -14,8 +14,10 @@ interface Layer { id: string; name: string; problem: string; order: number; comp
 function rows(values: string[][] | undefined): Row[] {
   if (!values || values.length < 2) return [];
   const head = values[0];
+  const hideIdx = head.indexOf('Hide');
   return values.slice(1)
     .filter((r) => (r[6] || '').trim()) // has a Company (col G)
+    .filter((r) => hideIdx === -1 || !(r[hideIdx] || '').trim()) // manual 'Hide' flag
     .map((r) => {
       const o: Row = {};
       head.forEach((h, i) => { o[h] = (r[i] ?? '').toString(); });

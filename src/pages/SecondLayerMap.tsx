@@ -15,6 +15,12 @@ export default function SecondLayerMap() {
   // A public page: a fetch failure and "not built yet" both land on the same
   // neutral empty state — never a raw error string.
   const empty = !loading && (!data || !data.layers.length);
+  const stats = data && data.layers.length
+    ? {
+        layers: data.layers.length,
+        companies: data.layers.reduce((n, l) => n + l.companies.length, 0),
+      }
+    : null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -40,11 +46,15 @@ export default function SecondLayerMap() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <p className="text-gray-600 max-w-2xl mb-10">
+        <p className="text-gray-600 max-w-2xl mb-4">
           Each layer below is a problem the buildout <em>creates</em>. The companies in it
           are seed-stage, surfaced automatically from specialist fund portfolios, public
           filings, and sector press — then checked against the thesis. Inclusion is not an
           endorsement.
+        </p>
+        <p className="text-gray-500 text-sm max-w-2xl mb-10">
+          This is a curated selection — the top companies per layer. The full ranked
+          dealflow, the watchlist, and the company-check agent are private.
         </p>
 
         {loading && <p className="text-gray-500">Loading the map…</p>}
@@ -52,6 +62,14 @@ export default function SecondLayerMap() {
           <div className="bg-white rounded-xl border border-gray-200 p-8 text-gray-500">
             The map is being compiled from the latest pipeline run — check back shortly.
           </div>
+        )}
+
+        {stats && (
+          <p className="text-sm text-gray-500 mb-6">
+            {stats.companies} companies across {stats.layers}{' '}
+            {stats.layers === 1 ? 'layer' : 'layers'}
+            {data?.updated ? ` · refreshed ${data.updated}` : ''}
+          </p>
         )}
 
         <div className="space-y-6">
