@@ -14,6 +14,12 @@ The `/dealflow` page (login-gated) has three parts:
 The heavy pipeline stays exactly where it is — manual `workflow_dispatch` in
 `second-layer-verticals`. This site never triggers it.
 
+There is also a **public** page at `/map` (the Second Layer Map) — no login. It
+reads only the pipeline's `Second Layer Map` tab, which holds publish-safe fields
+(company, one-line description, stage, website) and no scores, risks, or
+contacts. It uses the same Google service account and needs no extra config.
+`api/second-layer-map.ts` is the only unauthenticated endpoint; keep it that way.
+
 ## Vercel environment variables
 
 Set these in **Project → Settings → Environment Variables** (Production + Preview):

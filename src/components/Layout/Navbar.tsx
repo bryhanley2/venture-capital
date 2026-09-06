@@ -35,6 +35,9 @@ export default function Navbar() {
                 </Link>
               </>
             )}
+            <Link to="/map" className="text-gray-700 hover:text-brand-900 font-medium transition">
+              Second Layer Map
+            </Link>
             <Link to="/methodology" className="text-gray-700 hover:text-brand-900 font-medium transition">
               Methodology
             </Link>

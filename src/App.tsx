@@ -8,6 +8,7 @@ import Evaluate from './pages/Evaluate';
 import Results from './pages/Results';
 import Portfolio from './pages/Portfolio';
 import Dealflow from './pages/Dealflow';
+import SecondLayerMap from './pages/SecondLayerMap';
 import Methodology from './pages/Methodology';
 import About from './pages/About';
 
@@ -52,6 +53,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/map" element={<SecondLayerMap />} />
             <Route path="/methodology" element={<Methodology />} />
             <Route path="/about" element={<About />} />
           </Routes>
