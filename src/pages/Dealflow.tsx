@@ -92,6 +92,12 @@ function CompanyCheckCard() {
         </button>
       </form>
 
+      {loading && (
+        <p className="mt-4 text-sm text-gray-500">
+          Running live web searches — this usually takes 20–45 seconds.
+        </p>
+      )}
+
       {err && (
         <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
           {err}
