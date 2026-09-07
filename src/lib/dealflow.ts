@@ -91,6 +91,79 @@ export function scoreOf(row: DealRow): number {
   return Number.isFinite(n) ? n : 0;
 }
 
+/** USD parsed from a "Total Raised" cell, or null when it's unverified / blank.
+ * Verified cells lead with the figure, e.g. "12,500,000 (single source) · …". */
+export function fundingUsd(raw: string): number | null {
+  const s = (raw || '').trim();
+  if (!s || /^unverified/i.test(s)) return null;
+  const m = s.match(/^\$?\s*([\d,]+(?:\.\d+)?)\s*([mMbBkK])?/);
+  if (!m) return null;
+  const n = parseFloat(m[1].replace(/,/g, ''));
+  if (!Number.isFinite(n)) return null;
+  const unit = (m[2] || '').toLowerCase();
+  const mult = unit === 'k' ? 1e3 : unit === 'm' ? 1e6 : unit === 'b' ? 1e9 : 1;
+  return n * mult;
+}
+
+const HARD_CAP_USD = 10_000_000;
+
+// Trailing words that don't distinguish one company from another.
+const GENERIC_SUFFIX = new Set([
+  'climate', 'technologies', 'technology', 'tech', 'ai', 'labs', 'lab',
+  'systems', 'system', 'energy', 'inc', 'io', 'app', 'hq', 'co', 'corp',
+  'company', 'solutions', 'group', 'holdings', 'ventures', 'partners',
+]);
+
+function normName(s: string): string {
+  return (s || '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function hostOfUrl(u: string): string {
+  try { return new URL(u).hostname.replace(/^www\./, '').toLowerCase(); } catch { return ''; }
+}
+
+/** Collapse rows that are the same company: same website host, identical
+ * normalised name, or one name is the other plus a single generic word
+ * ("Crux" / "Crux Climate"). Keeps the highest-scored row, newest on a tie. */
+export function dedupeRows(rows: DealRow[]): DealRow[] {
+  const better = (a: DealRow, b: DealRow) =>
+    scoreOf(a) !== scoreOf(b)
+      ? scoreOf(a) > scoreOf(b) ? a : b
+      : (a.Date || '') >= (b.Date || '') ? a : b;
+
+  const kept: DealRow[] = [];
+  outer: for (const r of [...rows].sort((a, b) => scoreOf(b) - scoreOf(a))) {
+    const host = hostOfUrl(r.Website);
+    const nm = normName(r.Company);
+    const words = nm.split(' ');
+    for (let i = 0; i < kept.length; i++) {
+      const k = kept[i];
+      const kHost = hostOfUrl(k.Website);
+      const kNm = normName(k.Company);
+      const kWords = kNm.split(' ');
+      const sameHost = host && kHost && host === kHost;
+      const sameName = nm && nm === kNm;
+      const prefix =
+        (words.length === kWords.length + 1 && nm.startsWith(kNm + ' ') && GENERIC_SUFFIX.has(words[words.length - 1])) ||
+        (kWords.length === words.length + 1 && kNm.startsWith(nm + ' ') && GENERIC_SUFFIX.has(kWords[kWords.length - 1]));
+      if (sameHost || sameName || prefix) {
+        kept[i] = better(k, r);
+        continue outer;
+      }
+    }
+    kept.push(r);
+  }
+  return kept;
+}
+
+/** Board-ready rows: drop anything verified over the $10M thesis cap, then dedupe. */
+export function cleanBoardRows(rows: DealRow[]): DealRow[] {
+  const withinCap = rows.filter((r) => {
+    const usd = fundingUsd(r['Total Raised']);
+    return usd == null || usd <= HARD_CAP_USD;
+  });
+  return dedupeRows(withinCap);
+}
+
 export function tierOf(score: number): { label: string; klass: string } {
   if (score >= 80) return { label: 'Strong Yes', klass: 'bg-green-100 text-green-800 border-green-300' };
   if (score >= 70) return { label: 'Deep Dive', klass: 'bg-emerald-100 text-emerald-800 border-emerald-300' };
