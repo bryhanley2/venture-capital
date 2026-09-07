@@ -16,16 +16,20 @@ export interface MapLayer {
   companies: MapCompany[];
 }
 
-export interface SecondLayerMap {
+export interface MapTrend {
   trend: string;
   trend_blurb: string;
   updated: string;
   layers: MapLayer[];
 }
 
+export interface SecondLayerMap {
+  trends: MapTrend[];
+}
+
 export async function getSecondLayerMap(): Promise<SecondLayerMap> {
   const r = await fetch('/api/second-layer-map');
   const j = await r.json();
   if (!r.ok) throw new Error(j.error || `map ${r.status}`);
-  return j as SecondLayerMap;
+  return { trends: (j.trends || []) as MapTrend[] };
 }

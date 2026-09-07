@@ -1,26 +1,28 @@
-import { useEffect, useState } from 'react';
-import { getSecondLayerMap, SecondLayerMap as MapData, MapLayer } from '../lib/map';
+import { useEffect, useMemo, useState } from 'react';
+import { getSecondLayerMap, MapTrend, MapLayer } from '../lib/map';
 
 export default function SecondLayerMap() {
-  const [data, setData] = useState<MapData | null>(null);
+  const [trends, setTrends] = useState<MapTrend[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState(0);
 
   useEffect(() => {
     getSecondLayerMap()
-      .then(setData)
+      .then((d) => setTrends(d.trends))
       .catch((e) => console.warn('second layer map:', e))
       .finally(() => setLoading(false));
   }, []);
 
-  // A public page: a fetch failure and "not built yet" both land on the same
-  // neutral empty state — never a raw error string.
-  const empty = !loading && (!data || !data.layers.length);
-  const stats = data && data.layers.length
-    ? {
-        layers: data.layers.length,
-        companies: data.layers.reduce((n, l) => n + l.companies.length, 0),
-      }
-    : null;
+  const empty = !loading && trends.length === 0;
+  const trend = trends[selected];
+
+  const stats = useMemo(() => {
+    if (!trend) return null;
+    return {
+      layers: trend.layers.length,
+      companies: trend.layers.reduce((n, l) => n + l.companies.length, 0),
+    };
+  }, [trend]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -30,16 +32,35 @@ export default function SecondLayerMap() {
           <p className="text-brand-200 font-semibold tracking-wide uppercase text-sm">
             A Second Layer map
           </p>
-          <h1 className="text-4xl sm:text-5xl font-bold mt-3">
-            {data?.trend || 'The AI compute buildout'}
+
+          {trends.length > 1 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {trends.map((t, i) => (
+                <button
+                  key={t.trend}
+                  onClick={() => setSelected(i)}
+                  className={`text-sm px-3 py-1.5 rounded-full border transition ${
+                    i === selected
+                      ? 'bg-white text-brand-900 border-white'
+                      : 'border-white/30 text-brand-100 hover:bg-white/10'
+                  }`}
+                >
+                  {t.trend}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <h1 className="text-4xl sm:text-5xl font-bold mt-4">
+            {trend?.trend || 'The AI compute buildout'}
           </h1>
           <p className="text-lg text-brand-100 mt-5 max-w-2xl">
-            {data?.trend_blurb ||
+            {trend?.trend_blurb ||
               'The dominant trend is not the opportunity. The problems it creates are.'}
           </p>
-          {data?.updated && (
+          {trend?.updated && (
             <p className="text-sm text-brand-300 mt-6">
-              Auto-maintained by an AI sourcing pipeline · last refreshed {data.updated}
+              Auto-maintained by an AI sourcing pipeline · last refreshed {trend.updated}
             </p>
           )}
         </div>
@@ -47,7 +68,7 @@ export default function SecondLayerMap() {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <p className="text-gray-600 max-w-2xl mb-4">
-          Each layer below is a problem the buildout <em>creates</em>. The companies in it
+          Each layer below is a problem the trend <em>creates</em>. The companies in it
           are seed-stage, surfaced automatically from specialist fund portfolios, public
           filings, and sector press — then checked against the thesis. Inclusion is not an
           endorsement.
@@ -68,12 +89,12 @@ export default function SecondLayerMap() {
           <p className="text-sm text-gray-500 mb-6">
             {stats.companies} companies across {stats.layers}{' '}
             {stats.layers === 1 ? 'layer' : 'layers'}
-            {data?.updated ? ` · refreshed ${data.updated}` : ''}
+            {trend?.updated ? ` · refreshed ${trend.updated}` : ''}
           </p>
         )}
 
         <div className="space-y-6">
-          {data?.layers.map((layer, i) => (
+          {trend?.layers.map((layer, i) => (
             <LayerSection key={layer.id} layer={layer} index={i} />
           ))}
         </div>
