@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import {
   getDealflow, checkCompany, DealRow, WatchRow, CompanyCheck,
-  scoreOf, tierOf, fundingChip, sizeStatusOf,
+  scoreOf, tierOf, fundingChip, sizeStatusOf, cleanBoardRows,
 } from '../lib/dealflow';
 
 const PAGE_SIZE = 20;
@@ -283,16 +283,19 @@ function DealBoard({ rows, loading, err }: { rows: DealRow[]; loading: boolean; 
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState<string | null>(null);
 
+  // Drop over-cap rows and merge duplicate companies once, up front.
+  const base = useMemo(() => cleanBoardRows(rows), [rows]);
+
   const verticals = useMemo(() => {
-    const s = new Set(rows.map((r) => r.Vertical).filter(Boolean));
+    const s = new Set(base.map((r) => r.Vertical).filter(Boolean));
     return ['all', ...Array.from(s).sort()];
-  }, [rows]);
+  }, [base]);
 
   const filtered = useMemo(() => {
-    let f = vertical === 'all' ? rows : rows.filter((r) => r.Vertical === vertical);
+    let f = vertical === 'all' ? base : base.filter((r) => r.Vertical === vertical);
     if (fund === 'target') f = f.filter((r) => sizeStatusOf(r['Total Raised']) !== 'above_range');
     return [...f].sort((a, b) => scoreOf(b) - scoreOf(a));
-  }, [rows, vertical, fund]);
+  }, [base, vertical, fund]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const clampedPage = Math.min(page, pageCount - 1);
@@ -336,6 +339,16 @@ function DealBoard({ rows, loading, err }: { rows: DealRow[]; loading: boolean; 
         </div>
       </div>
 
+      {filtered.length === 0 ? (
+        <p className="text-gray-500 text-sm py-4">
+          No companies match this filter.{' '}
+          {fund === 'target' && (
+            <button onClick={() => reset(() => setFund('all'))} className="text-brand-700 hover:text-brand-900">
+              Show all within cap
+            </button>
+          )}
+        </p>
+      ) : (
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
@@ -401,8 +414,9 @@ function DealBoard({ rows, loading, err }: { rows: DealRow[]; loading: boolean; 
           </tbody>
         </table>
       </div>
+      )}
 
-      {pageCount > 1 && (
+      {filtered.length > 0 && pageCount > 1 && (
         <div className="flex items-center justify-between mt-4 text-sm">
           <button
             onClick={() => { setPage((p) => Math.max(0, p - 1)); setOpen(null); }}
