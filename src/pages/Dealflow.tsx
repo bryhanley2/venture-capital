@@ -70,7 +70,12 @@ function CompanyCheckCard() {
         who are the founders.
       </p>
 
-      <form onSubmit={run} className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+      <p className="text-xs text-gray-400 mt-2">
+        Spell the company name (and URL, if you add one) exactly — a typo usually
+        returns nothing.
+      </p>
+
+      <form onSubmit={run} className="mt-3 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
