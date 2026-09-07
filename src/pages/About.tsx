@@ -4,18 +4,15 @@ export default function About() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-4xl font-bold text-gray-900">About</h1>
 
-        <p className="mt-4 text-lg text-gray-700 leading-relaxed">
-          My name is Bryan Hanley, a startup operator based in New York, USA.
-        </p>
-
         <div className="mt-8 space-y-6 text-gray-700 leading-relaxed">
           <h2 className="text-2xl font-bold text-gray-900">Where the thesis came from</h2>
           <p>
-            My &ldquo;Second Layer Approach&rdquo; investment thesis emerged from my
-            interest in and work within startups. As someone passionate about venture
-            investing, I realized early on in my career at a startup the significant role
-            of AI in reshaping how we work, and subsequently, where investors are
-            committing their capital to help drive this change.
+            My name is Bryan Hanley, a startup operator based in New York, USA. My
+            &ldquo;Second Layer Approach&rdquo; investment thesis emerged from my interest
+            in and work within startups. As someone passionate about venture investing, I
+            realized early on in my career at a startup the significant role of AI in
+            reshaping how we work, and subsequently, where investors are committing their
+            capital to help drive this change.
           </p>
           <p>
             The speed in which AI has scaled, from new features to entire new platforms,
