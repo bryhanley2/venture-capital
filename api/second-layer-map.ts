@@ -10,6 +10,7 @@ type Row = Record<string, string>;
 
 interface Company { name: string; blurb: string; stage: string; website: string; }
 interface Layer { id: string; name: string; problem: string; order: number; companies: Company[]; }
+interface Trend { trend: string; trend_blurb: string; updated: string; layers: Layer[]; }
 
 function rows(values: string[][] | undefined): Row[] {
   if (!values || values.length < 2) return [];
@@ -25,6 +26,36 @@ function rows(values: string[][] | undefined): Row[] {
     });
 }
 
+// Group one trend's rows into ordered layers with their companies.
+function toTrend(trendRows: Row[]): Trend {
+  const byId = new Map<string, Layer>();
+  for (const r of trendRows) {
+    const id = r['Layer ID'];
+    if (!id) continue;
+    if (!byId.has(id)) {
+      byId.set(id, {
+        id,
+        name: r['Layer'] || id,
+        problem: r['Problem'] || '',
+        order: parseInt(r['Layer Order'] || '99', 10),
+        companies: [],
+      });
+    }
+    byId.get(id)!.companies.push({
+      name: r['Company'] || '',
+      blurb: r['Blurb'] || '',
+      stage: r['Stage'] || '',
+      website: r['Website'] || '',
+    });
+  }
+  return {
+    trend: trendRows[0]['Trend'] || '',
+    trend_blurb: trendRows[0]['Trend Blurb'] || '',
+    updated: trendRows.map((r) => r['Updated'] || '').sort().reverse()[0] || '',
+    layers: [...byId.values()].sort((a, b) => a.order - b.order),
+  };
+}
+
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
   try {
     const sheetId = process.env.GOOGLE_SHEET_ID;
@@ -36,47 +67,28 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
     if (gr.status === 400) {
       // Tab doesn't exist yet — the pipeline hasn't built a map. Not an error.
       res.setHeader('Cache-Control', 's-maxage=300');
-      res.status(200).json({ trend: '', trend_blurb: '', updated: '', layers: [] });
+      res.status(200).json({ trends: [] });
       return;
     }
     if (!gr.ok) throw new Error(`Sheets API ${gr.status}: ${(await gr.text()).slice(0, 200)}`);
     const body = (await gr.json()) as { values?: string[][] };
     const all = rows(body.values);
 
-    if (!all.length) {
-      res.setHeader('Cache-Control', 's-maxage=300');
-      res.status(200).json({ trend: '', trend_blurb: '', updated: '', layers: [] });
-      return;
-    }
-
-    const trend = all[0]['Trend'] || '';
-    const trend_blurb = all[0]['Trend Blurb'] || '';
-    const updated = all.map((r) => r['Updated'] || '').sort().reverse()[0] || '';
-
-    const byId = new Map<string, Layer>();
+    // Group by trend; each trend keeps its own layers, companies, and refresh date.
+    const groups = new Map<string, Row[]>();
     for (const r of all) {
-      const id = r['Layer ID'];
-      if (!id) continue;
-      if (!byId.has(id)) {
-        byId.set(id, {
-          id,
-          name: r['Layer'] || id,
-          problem: r['Problem'] || '',
-          order: parseInt(r['Layer Order'] || '99', 10),
-          companies: [],
-        });
-      }
-      byId.get(id)!.companies.push({
-        name: r['Company'] || '',
-        blurb: r['Blurb'] || '',
-        stage: r['Stage'] || '',
-        website: r['Website'] || '',
-      });
+      const key = (r['Trend'] || '').trim();
+      if (!key) continue;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key)!.push(r);
     }
-    const layers = [...byId.values()].sort((a, b) => a.order - b.order);
+    const trends = [...groups.values()]
+      .map(toTrend)
+      .filter((t) => t.layers.length)
+      .sort((a, b) => (b.updated || '').localeCompare(a.updated || ''));
 
     res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=86400');
-    res.status(200).json({ trend, trend_blurb, updated, layers });
+    res.status(200).json({ trends });
   } catch (e: any) {
     res.status(500).json({ error: e?.message || 'second-layer-map failed' });
   }
