@@ -12,13 +12,17 @@ interface Company { name: string; blurb: string; stage: string; website: string;
 interface Layer { id: string; name: string; problem: string; order: number; companies: Company[]; }
 interface Trend { trend: string; trend_blurb: string; updated: string; layers: Layer[]; }
 
+const PAST_SEED = /series\s*[a-z]|series[_-][a-z]|growth|late[\s-]?stage|mezzanine|pre[\s-]?ipo|\bpublic\b|acquired/i;
+
 function rows(values: string[][] | undefined): Row[] {
   if (!values || values.length < 2) return [];
   const head = values[0];
   const hideIdx = head.indexOf('Hide');
+  const stageIdx = head.indexOf('Stage');
   return values.slice(1)
     .filter((r) => (r[6] || '').trim()) // has a Company (col G)
     .filter((r) => hideIdx === -1 || !(r[hideIdx] || '').trim()) // manual 'Hide' flag
+    .filter((r) => stageIdx === -1 || !PAST_SEED.test(r[stageIdx] || '')) // seed-stage only
     .map((r) => {
       const o: Row = {};
       head.forEach((h, i) => { o[h] = (r[i] ?? '').toString(); });
