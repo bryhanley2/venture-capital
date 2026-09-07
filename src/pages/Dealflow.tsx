@@ -86,16 +86,20 @@ function CompanyCheckCard() {
         <button
           type="submit"
           disabled={loading || !name.trim()}
-          className="bg-brand-900 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-brand-800 transition disabled:opacity-50"
+          className="bg-brand-900 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-brand-800 transition disabled:opacity-50 flex items-center justify-center gap-2"
         >
+          {loading && (
+            <span className="inline-block w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+          )}
           {loading ? 'Researching…' : 'Check'}
         </button>
       </form>
 
       {loading && (
-        <p className="mt-4 text-sm text-gray-500">
-          Running live web searches — this usually takes 20–45 seconds.
-        </p>
+        <div className="mt-4 flex items-center gap-3 text-sm text-gray-500">
+          <span className="inline-block w-4 h-4 border-2 border-gray-300 border-t-brand-600 rounded-full animate-spin" />
+          <span>Running live web searches — this usually takes 20–45 seconds.</span>
+        </div>
       )}
 
       {err && (
