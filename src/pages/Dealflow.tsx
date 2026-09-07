@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import {
   getDealflow, checkCompany, DealRow, WatchRow, CompanyCheck,
-  scoreOf, tierOf, fundingChip,
+  scoreOf, tierOf, fundingChip, sizeStatusOf,
 } from '../lib/dealflow';
+
+const PAGE_SIZE = 20;
 
 export default function Dealflow() {
   const [rows, setRows] = useState<DealRow[]>([]);
@@ -277,6 +279,8 @@ function WatchlistPanel({ rows, loading }: { rows: WatchRow[]; loading: boolean 
 /* ------------------------------------------------------------------ */
 function DealBoard({ rows, loading, err }: { rows: DealRow[]; loading: boolean; err: string }) {
   const [vertical, setVertical] = useState('all');
+  const [fund, setFund] = useState<'target' | 'all'>('target');
+  const [page, setPage] = useState(0);
   const [open, setOpen] = useState<string | null>(null);
 
   const verticals = useMemo(() => {
@@ -284,10 +288,17 @@ function DealBoard({ rows, loading, err }: { rows: DealRow[]; loading: boolean; 
     return ['all', ...Array.from(s).sort()];
   }, [rows]);
 
-  const shown = useMemo(() => {
-    const f = vertical === 'all' ? rows : rows.filter((r) => r.Vertical === vertical);
+  const filtered = useMemo(() => {
+    let f = vertical === 'all' ? rows : rows.filter((r) => r.Vertical === vertical);
+    if (fund === 'target') f = f.filter((r) => sizeStatusOf(r['Total Raised']) !== 'above_range');
     return [...f].sort((a, b) => scoreOf(b) - scoreOf(a));
-  }, [rows, vertical]);
+  }, [rows, vertical, fund]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const clampedPage = Math.min(page, pageCount - 1);
+  const shown = filtered.slice(clampedPage * PAGE_SIZE, clampedPage * PAGE_SIZE + PAGE_SIZE);
+
+  const reset = (fn: () => void) => { fn(); setPage(0); setOpen(null); };
 
   if (loading) return <Section><p className="text-gray-500">Loading dealflow…</p></Section>;
   if (err) return <Section><p className="text-red-600 text-sm">{err}</p></Section>;
@@ -297,17 +308,32 @@ function DealBoard({ rows, loading, err }: { rows: DealRow[]; loading: boolean; 
     <Section>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <h2 className="text-lg font-semibold text-gray-900">
-          {shown.length} compan{shown.length === 1 ? 'y' : 'ies'}
+          {filtered.length} compan{filtered.length === 1 ? 'y' : 'ies'}
+          {fund === 'target' && rows.length > filtered.length && (
+            <span className="ml-2 text-xs font-normal text-gray-400">
+              in thesis range
+            </span>
+          )}
         </h2>
-        <select
-          value={vertical}
-          onChange={(e) => setVertical(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500"
-        >
-          {verticals.map((v) => (
-            <option key={v} value={v}>{v === 'all' ? 'All verticals' : v}</option>
-          ))}
-        </select>
+        <div className="flex flex-wrap gap-2">
+          <select
+            value={fund}
+            onChange={(e) => reset(() => setFund(e.target.value as 'target' | 'all'))}
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500"
+          >
+            <option value="target">In thesis range (≤ $4M)</option>
+            <option value="all">All within cap (≤ $10M)</option>
+          </select>
+          <select
+            value={vertical}
+            onChange={(e) => reset(() => setVertical(e.target.value))}
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500"
+          >
+            {verticals.map((v) => (
+              <option key={v} value={v}>{v === 'all' ? 'All verticals' : v}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -375,6 +401,28 @@ function DealBoard({ rows, loading, err }: { rows: DealRow[]; loading: boolean; 
           </tbody>
         </table>
       </div>
+
+      {pageCount > 1 && (
+        <div className="flex items-center justify-between mt-4 text-sm">
+          <button
+            onClick={() => { setPage((p) => Math.max(0, p - 1)); setOpen(null); }}
+            disabled={clampedPage === 0}
+            className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40"
+          >
+            ← Previous
+          </button>
+          <span className="text-gray-500">
+            Page {clampedPage + 1} of {pageCount}
+          </span>
+          <button
+            onClick={() => { setPage((p) => Math.min(pageCount - 1, p + 1)); setOpen(null); }}
+            disabled={clampedPage >= pageCount - 1}
+            className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40"
+          >
+            Next →
+          </button>
+        </div>
+      )}
     </Section>
   );
 }

@@ -99,6 +99,19 @@ export function tierOf(score: number): { label: string; klass: string } {
   return { label: 'Backlog', klass: 'bg-gray-100 text-gray-600 border-gray-300' };
 }
 
+/** The pipeline appends [ABOVE_RANGE] / [BELOW_RANGE] / [UNVERIFIED] to the
+ * "Total Raised" cell; a clean cell means the figure is inside the thesis
+ * target ($1.8M–$4M). REJECT (over the $10M cap) never reaches the sheet. */
+export type SizeStatus = 'in_range' | 'below_range' | 'above_range' | 'unverified';
+
+export function sizeStatusOf(raw: string): SizeStatus {
+  const v = (raw || '').toUpperCase();
+  if (v.includes('[ABOVE_RANGE]')) return 'above_range';
+  if (v.includes('[BELOW_RANGE]')) return 'below_range';
+  if (v.includes('UNVERIFIED')) return 'unverified';
+  return 'in_range';
+}
+
 export function fundingChip(raw: string): { text: string; klass: string } {
   const v = (raw || '').toLowerCase();
   if (v.includes('unverified')) return { text: 'Funding unverified', klass: 'bg-amber-50 text-amber-700 border-amber-200' };
