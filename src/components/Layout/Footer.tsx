@@ -43,6 +43,16 @@ export default function Footer() {
                 </a>
               </div>
               <div>
+                <a
+                  href="https://bryanhanley.substack.com/about"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition"
+                >
+                  Substack
+                </a>
+              </div>
+              <div>
                 <a href="mailto:bry.hanley2@gmail.com" className="hover:text-white transition">
                   Email
                 </a>

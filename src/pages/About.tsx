@@ -4,6 +4,10 @@ export default function About() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-4xl font-bold text-gray-900">About</h1>
 
+        <p className="mt-4 text-lg text-gray-700 leading-relaxed">
+          My name is Bryan Hanley, a startup operator based in New York, USA.
+        </p>
+
         <div className="mt-8 space-y-6 text-gray-700 leading-relaxed">
           <h2 className="text-2xl font-bold text-gray-900">Where the thesis came from</h2>
           <p>
@@ -67,7 +71,7 @@ export default function About() {
           </p>
         </div>
 
-        <div className="mt-10 flex gap-6 text-brand-700 font-semibold">
+        <div className="mt-10 flex flex-wrap gap-6 text-brand-700 font-semibold">
           <a
             href="https://www.linkedin.com/in/bryan-stanley-hanley/"
             target="_blank"
@@ -75,6 +79,14 @@ export default function About() {
             className="hover:text-brand-900"
           >
             LinkedIn
+          </a>
+          <a
+            href="https://bryanhanley.substack.com/about"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-brand-900"
+          >
+            Substack
           </a>
           <a href="mailto:bry.hanley2@gmail.com" className="hover:text-brand-900">
             Email
