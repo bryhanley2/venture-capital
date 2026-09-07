@@ -1,6 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { authorised } from './_shared.js';
 
+// Live web searches + generation run well past the 10s default. 60s is the
+// Hobby-plan ceiling; raise on a paid plan if checks still get cut off.
+export const maxDuration = 60;
+
 const MODEL = process.env.PIPELINE_MODEL || 'claude-sonnet-5';
 
 const SCHEMA = `{

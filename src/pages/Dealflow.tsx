@@ -70,7 +70,12 @@ function CompanyCheckCard() {
         who are the founders.
       </p>
 
-      <form onSubmit={run} className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+      <p className="text-xs text-gray-400 mt-2">
+        Spell the company name (and URL, if you add one) exactly — a typo usually
+        returns nothing.
+      </p>
+
+      <form onSubmit={run} className="mt-3 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -86,11 +91,21 @@ function CompanyCheckCard() {
         <button
           type="submit"
           disabled={loading || !name.trim()}
-          className="bg-brand-900 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-brand-800 transition disabled:opacity-50"
+          className="bg-brand-900 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-brand-800 transition disabled:opacity-50 flex items-center justify-center gap-2"
         >
+          {loading && (
+            <span className="inline-block w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+          )}
           {loading ? 'Researching…' : 'Check'}
         </button>
       </form>
+
+      {loading && (
+        <div className="mt-4 flex items-center gap-3 text-sm text-gray-500">
+          <span className="inline-block w-4 h-4 border-2 border-gray-300 border-t-brand-600 rounded-full animate-spin" />
+          <span>Running live web searches — this usually takes 20–45 seconds.</span>
+        </div>
+      )}
 
       {err && (
         <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
