@@ -56,35 +56,6 @@ export async function getDealflow(): Promise<DealflowData> {
   return { companies: (j.companies || []) as DealRow[], watchlist: (j.watchlist || []) as WatchRow[] };
 }
 
-export interface CompanyCheck {
-  company: string;
-  url?: string;
-  is_operating_company?: boolean;
-  is_second_layer?: 'yes' | 'borderline' | 'no';
-  second_layer_reason?: string;
-  current_stage?: string;
-  total_raised_usd?: number | null;
-  latest_round?: string | null;
-  founded_year?: string | null;
-  founders?: string;
-  traction?: string;
-  take?: string;
-  sources?: string[];
-  raw?: string;
-  parsed?: null;
-}
-
-export async function checkCompany(company: string, url?: string): Promise<CompanyCheck> {
-  const r = await fetch('/api/company-check', {
-    method: 'POST',
-    headers: headers(),
-    body: JSON.stringify({ company, url }),
-  });
-  const j = await r.json();
-  if (!r.ok) throw new Error(j.error || `company-check ${r.status}`);
-  return j as CompanyCheck;
-}
-
 /** Numeric score from the "Weighted %" cell (may be blank). */
 export function scoreOf(row: DealRow): number {
   const n = parseFloat((row['Weighted %'] || '').toString());
